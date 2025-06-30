@@ -10,7 +10,7 @@ Musician's Mentor is a full-stack platform that facilitates the connecting of yo
 
 ## Prerequisites
 
-Before running this project locally, ensure you have the following installed:
+Before running this project locally, ensure you have the following set up:
 
 - Java Development Kit (JDK) 8 or higher
 - Node.js and npm (Node Package Manager)
@@ -35,7 +35,10 @@ Before running this project locally, ensure you have the following installed:
 
 ## Usage
 
-- Access the frontend application via `http://localhost:3000`.
+- Access the frontend application via `http://localhost:3000` or `http://localhost:5173` (depending on your local machine).
 - Use the provided API endpoints to perform CRUD operations on the database:
+    - `/api/students/{studentId}`
+    - `/api/teachers/{teacherId}`
+
 
 
