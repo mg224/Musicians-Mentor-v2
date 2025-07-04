@@ -1,6 +1,9 @@
-import React, { useState, type ChangeEvent } from 'react'
-import { Music, Eye, EyeOff, Mail, Lock, User, ArrowLeft, GraduationCap, BookOpen } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import React, { useState, type ChangeEvent } from "react"
+import { Music, Eye, EyeOff, Mail, Lock, User, ArrowLeft, GraduationCap, BookOpen } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import api from "../api"
+import { ACCESS_TOKEN } from "../constants"
 
 interface FormData {
   email: string
@@ -9,25 +12,65 @@ interface FormData {
 
 interface FormErrors {
   email?: string
-  username?: string
   password?: string
-  accountType?: string
 }
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   })
   const [errors, setErrors] = useState<FormErrors>({})
+  const navigate = useNavigate()
 
-  const handleSubmit = async () => {
-    
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({...prev, [name]: value}))
+
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }))
+    }
   }
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
-    throw new Error('Function not implemented.')
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {}
+
+    if (!formData.email) {
+      newErrors.email = "Email is required"
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email"
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required"
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!validateForm()) {
+      return
+    }
+
+    try {
+      const res = await api.post("/auth/login", formData)
+      console.log(res)
+      toast.success("Logged in successfully!")
+      sessionStorage.setItem(ACCESS_TOKEN, res.data.token)
+      navigate("/dashboard")
+    } catch (error) {
+      alert(error)
+    }
   }
 
   return (
@@ -146,7 +189,7 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Switch Auth Mode */}
+          {/* Go to Sign Up Page */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?

@@ -5,6 +5,7 @@ import UserDashboard from "./pages/UserDashboard"
 import LoginPage from "./pages/Login"
 import RegisterPage from "./pages/Register"
 import VerifyAccountPage from "./pages/Verify"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
 
@@ -24,12 +25,16 @@ function App() {
           element={<RegisterPage />}
         />
         <Route
-          path="verify"
+          path="/verify"
           element={<VerifyAccountPage />}
         />
         <Route 
-          path="/home" 
-          element={<UserDashboard />} 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          } 
         />
         <Route 
           path="*" 

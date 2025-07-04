@@ -2,6 +2,7 @@ package com.mg.musiciansmentorbackend.controller;
 
 import com.mg.musiciansmentorbackend.dto.LoginUserDto;
 import com.mg.musiciansmentorbackend.dto.RegisterUserDto;
+import com.mg.musiciansmentorbackend.dto.ResendEmailDto;
 import com.mg.musiciansmentorbackend.dto.VerifyUserDto;
 import com.mg.musiciansmentorbackend.model.AccountType;
 import com.mg.musiciansmentorbackend.model.User;
@@ -47,10 +48,10 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/resendVerification")
-    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) {
+    @PostMapping("/resend-verification")
+    public ResponseEntity<?> resendVerificationCode(@RequestBody ResendEmailDto resendEmailDto) {
         try {
-            authenticationService.resendVerificationCode(email);
+            authenticationService.resendVerificationCode(resendEmailDto.getEmail());
             return ResponseEntity.ok("Verification code resent");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

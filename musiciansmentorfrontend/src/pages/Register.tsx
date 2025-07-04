@@ -1,6 +1,8 @@
-import React, { useState, type ChangeEvent } from 'react'
-import { Music, Eye, EyeOff, Mail, Lock, User, ArrowLeft, GraduationCap, BookOpen } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import React, { useState } from "react"
+import { Music, Eye, EyeOff, Mail, Lock, User, ArrowLeft, GraduationCap, BookOpen } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import api from "../api"
+import { toast } from "react-toastify"
 
 type AccountType = 'STUDENT' | 'TEACHER'
 
@@ -22,40 +24,48 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    username: '',
-    password: '',
-    accountType: 'STUDENT'
+    email: "",
+    username: "",
+    password: "",
+    accountType: "STUDENT"
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [confirmPassword, setConfirmPassowrd] = useState<string>("")
+  const navigate = useNavigate()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({...prev, [name]: value}))
+
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }))
+    }
   }
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
 
     if (!formData.email) {
-      newErrors.email = 'Email is required'
+      newErrors.email = "Email is required"
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email'
+      newErrors.email = "Please enter a valid email"
     }
 
     if (!formData.username) {
-      newErrors.username = 'Username is required'
+      newErrors.username = "Username is required"
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required'
+      newErrors.password = "Password is required"
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
+      newErrors.password = "Password must be at least 6 characters"
     }
 
     if (formData.password != confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match'
+      newErrors.confirmPassword = "Passwords do not match"
     }
 
     setErrors(newErrors)
@@ -69,7 +79,14 @@ export default function RegisterPage() {
       return
     }
 
-    alert("Successful login")
+    try {
+      const res = await api.post("/auth/signup", formData)
+      console.log(res)
+      toast.success("Account created successfully!")
+      navigate("/verify")
+    } catch (error) {
+      alert(error)
+    }
   }
 
   return (
@@ -272,7 +289,7 @@ export default function RegisterPage() {
             </button>
           </div>
 
-          {/* Switch to Sign In Mode */}
+          {/* Switch to Sign In Page */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?

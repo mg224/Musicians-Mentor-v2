@@ -97,10 +97,13 @@ public class AuthenticationService {
             if (user.isEnabled()) {
                 throw new RuntimeException("Account is already verified");
             }
-            user.setVerificationCode(generateVerificationCode());
+
+            String newVerificationCode = generateVerificationCode();
+            user.setVerificationCode(newVerificationCode);
             user.setVerificationExpiration(LocalDateTime.now().plusMinutes(30));
-            sendVerificationEmail(user);
+
             userRepository.save(user);
+            sendVerificationEmail(user);
         } else {
             throw new RuntimeException("User not found");
         }
