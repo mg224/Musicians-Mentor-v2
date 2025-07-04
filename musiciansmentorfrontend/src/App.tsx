@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import NotFound from "./pages/NotFound"
-import LoginRegister from "./pages/LoginSignup"
 import LandingPage from "./pages/LandingPage"
 import UserDashboard from "./pages/UserDashboard"
+import LoginPage from "./pages/Login"
+import RegisterPage from "./pages/Register"
+import VerifyAccountPage from "./pages/Verify"
 
 function App() {
 
@@ -15,17 +17,15 @@ function App() {
         />
         <Route
           path="/login"
-          element={<LoginRegister
-                    route="/api/auth/login"
-                    method="login"
-                   />}
+          element={<LoginPage/>}
         />
         <Route
           path="/signup"
-          element={<LoginRegister
-                    route="/api/auth/signup"
-                    method="signup"
-                   />}
+          element={<RegisterPage />}
+        />
+        <Route
+          path="verify"
+          element={<VerifyAccountPage />}
         />
         <Route 
           path="/home" 

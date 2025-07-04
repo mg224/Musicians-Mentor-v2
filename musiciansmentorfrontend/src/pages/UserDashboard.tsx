@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Music, Bell, Settings, LogOut, User, MessageCircle, Star,  MapPin, Search } from 'lucide-react'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 export default function UserDashboard() {
 
@@ -18,13 +19,18 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 overflow-hidden">
       <Navbar
         userName={user.name}
         userRole={user.role}
         userAvatar={user.avatar}
       />
-      
+
+      <div className="w-full h-3/4">
+        <p>Content</p>
+      </div>
+
+      <Footer />
     </div>
   )
 }

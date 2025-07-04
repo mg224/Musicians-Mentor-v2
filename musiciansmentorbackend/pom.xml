@@ -11,7 +11,7 @@
 	<groupId>com.mg</groupId>
 	<artifactId>musiciansmentorbackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>musiciansmentor</name>
+	<name>musiciansmentorbackend</name>
 	<description>Musician&apos;s Mentor</description>
 	<url/>
 	<licenses>

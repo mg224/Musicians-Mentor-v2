@@ -36,12 +36,21 @@ public class User implements UserDetails {
     @Column(name = "verification_expiration")
     private LocalDateTime verificationExpiration;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false)
+    private AccountType accountType;
+
+    @Column(name = "profile_created", nullable = false)
+    private boolean profileCreated = false;
+
     public User() {}
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, AccountType accountType) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.accountType = accountType;
+        this.profileCreated = false;
     }
 
     @Override

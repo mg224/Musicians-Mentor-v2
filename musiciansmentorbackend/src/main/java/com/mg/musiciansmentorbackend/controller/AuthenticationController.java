@@ -3,6 +3,7 @@ package com.mg.musiciansmentorbackend.controller;
 import com.mg.musiciansmentorbackend.dto.LoginUserDto;
 import com.mg.musiciansmentorbackend.dto.RegisterUserDto;
 import com.mg.musiciansmentorbackend.dto.VerifyUserDto;
+import com.mg.musiciansmentorbackend.model.AccountType;
 import com.mg.musiciansmentorbackend.model.User;
 import com.mg.musiciansmentorbackend.responses.LoginResponse;
 import com.mg.musiciansmentorbackend.service.AuthenticationService;
@@ -23,9 +24,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
         User registerUser = authenticationService.signup(registerUserDto);
-        return ResponseEntity.ok(registerUser);
+        return ResponseEntity.ok("Registration successful! Please check your email to verify your account.");
     }
 
     @PostMapping("/login")

@@ -23,14 +23,14 @@ Before running this project locally, ensure you have the following set up:
 
 1. Clone this repository.
 2. Open the `musiciansmentorbackend` directory in your preferred IDE.
-3. Configure the `application.properties` file in the `src/main/resources` directory with your Supabase database credentials and Email credentials (This application uses Supabase and JWT Authentication and Java Mail Sender, so you'll need to configure the necessary details for these fields).
+3. Configure the `application.properties` file in the `src/main/resources` directory with your Supabase database credentials and Email credentials (This application uses Supabase and JWT Authentication and Java Mail Sender, so you'll need to configure the necessary details for these fields. Create a `.env` file with the corresponding variables used in the `application.properties`).
 4. Run the Spring Boot application.
 
 ### Frontend Setup
 
 1. Navigate to the `musiciansmentorfrontend` directory in your terminal.
 2. Run `npm install` to install the necessary dependencies.
-3. Update the `src/config.js` file with the appropriate backend API URL.
+3. Create a `.env` file and create a variable `VITE_API_URL` with the appropriate backend API URL.
 4. Run `npm start` to start the ReactJS application.
 
 ## Usage

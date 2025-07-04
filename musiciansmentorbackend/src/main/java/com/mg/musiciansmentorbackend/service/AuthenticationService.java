@@ -21,21 +21,27 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final ProfileService profileService;
 
     public AuthenticationService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
-            EmailService emailService
+            EmailService emailService,
+            ProfileService profileService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
+        this.profileService = profileService;
     }
 
     public User signup(RegisterUserDto input) {
-        User user = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
+        if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+            throw new RuntimeException("User with this email already exists");
+        }
+        User user = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()), input.getAccountType());
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpiration(LocalDateTime.now().plusMinutes(15));
         user.setEnabled(false);
@@ -74,6 +80,7 @@ public class AuthenticationService {
                 user.setVerificationCode(null);
                 user.setVerificationExpiration(null);
                 userRepository.save(user);
+                profileService.createUserProfile(user);
             } else {
                 throw new RuntimeException("Invalid verification code");
             }
