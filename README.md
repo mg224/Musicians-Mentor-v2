@@ -5,7 +5,7 @@ Musician's Mentor is a full-stack platform that facilitates the connecting of yo
 ## Features
 
 - **Supabase PostgreSQL Database:** Stores detailed information about users/students/teachers.
-- **Spring Boot Backend:** Provides a robust RESTful API to manage user/student/teacher data efficiently. The backend is packaged as a Dockerfile and hosted on Heroku.
+- **Spring Boot Backend:** Provides a RESTful API to manage user/student/teacher data efficiently. The backend is packaged as a Dockerfile and hosted on Heroku.
 - **React.js Frontend:** A user-friendly interface for completing profiles and searching the teacher database. The frontend is hosted on Vercel.
 
 ## Prerequisites
@@ -36,9 +36,5 @@ Before running this project locally, ensure you have the following set up:
 ## Usage
 
 - Access the frontend application via `http://localhost:3000` or `http://localhost:5173` (depending on your local machine).
-- Use the provided API endpoints to perform CRUD operations on the database:
-    - `/api/students/{studentId}`
-    - `/api/teachers/{teacherId}`
-
 
 
