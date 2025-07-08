@@ -35,6 +35,6 @@ Before running this project locally, ensure you have the following set up:
 
 ## Usage
 
-- Access the frontend application via `http://localhost:3000` or `http://localhost:5173` (depending on your local machine).
+- Access the frontend application via `http://localhost:5173`.
 
 
