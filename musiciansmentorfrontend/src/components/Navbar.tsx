@@ -1,5 +1,8 @@
 import React, { useState } from "react"
 import { Music, Bell, Settings, LogOut, User, MessageCircle, Search } from 'lucide-react'
+import api from "../api"
+import { ACCESS_TOKEN } from "../constants"
+import { useNavigate } from "react-router-dom"
 
 interface NavbarProps {
   userName: string
@@ -9,8 +12,31 @@ interface NavbarProps {
 
 export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) {
 
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState('dashboard')
   const [notifications, setNotifications] = useState(3)
+  const navigate = useNavigate()
+
+  const handleLogout = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    sessionStorage.removeItem(ACCESS_TOKEN)
+    sessionStorage.clear()
+
+    navigate("/")
+
+    // try {
+    //   const token = sessionStorage.getItem(ACCESS_TOKEN)
+    //   if (!token) {
+    //     throw new Error("No token")
+    //   }
+    //   await api.post("/auth/logout/", { token: token })
+    //   sessionStorage.removeItem(ACCESS_TOKEN)
+    //   navigate("/")
+    // } catch (error) {
+    //   console.error("Logout failed:", error)
+    //   alert(error)
+    // }
+  }
 
   return (
     <nav className="relative bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white shadow-lg">
@@ -26,9 +52,9 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
 
           <div className="hidden md:flex items-center space-x-8">
             <button 
-              onClick={() => setActiveTab('overview')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                activeTab === 'overview' 
+              onClick={() => setActiveTab('dashboard')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer ${
+                activeTab === 'dashboard' 
                   ? 'bg-white text-purple-600 shadow-lg' 
                   : 'hover:bg-white hover:bg-opacity-20'
               }`}
@@ -38,7 +64,7 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
             </button>
             <button 
               onClick={() => setActiveTab('messages')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer ${
                 activeTab === 'messages' 
                   ? 'bg-white text-purple-600 shadow-lg' 
                   : 'hover:bg-white hover:text-purple-600'
@@ -47,7 +73,14 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
               <MessageCircle className="w-4 h-4" />
               <span>Messages</span>
             </button>
-            <button className="flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+            <button 
+              onClick={() => setActiveTab('search')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer ${
+                activeTab === 'search' 
+                  ? 'bg-white text-purple-600 shadow-lg' 
+                  : 'hover:bg-white hover:text-purple-600'
+              }`}
+            >
               <Search className="w-4 h-4" />
               <span>Find Musicians</span>
             </button>
@@ -76,7 +109,10 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
                 <p className="text-xs opacity-80">{userRole}</p>
               </div>
             </div>
-            <button className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-all duration-300">
+            <button 
+              onClick={handleLogout}
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-all duration-300"
+            >
               <LogOut className="w-5 h-5" />
             </button>
           </div>
