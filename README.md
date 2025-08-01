@@ -12,7 +12,7 @@
   <h2> Core Features </h2>
   <p> 1. JWT authentication to ensure security of users </p>
   <p> 2. Search filters to browse a directory of accomplished student teachers nationwide by location, instrument, experience level, rate, etc. </p>
-  <p> 3. Contact teachers/students through in-app messaging </p>
+  <p> 3. Contact teachers/students through in-app messaging (Coming soon!) </p>
 
   <h2> Tech Stack </h2>
   <p> Frontend: React + Vite, TypeScript, and TailwindCSS </p> 
