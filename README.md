@@ -1,40 +1,24 @@
-# Musician's Mentor
+<div align="center">
+  <h1> Musician's Mentor </h1
+</div>
 
-Musician's Mentor is a full-stack platform that facilitates the connecting of young student musicians to experienced student musicians to find affordable music lessons and mentorship. The private teaching landscape in music, particularly at the high school level, has gotten increasingly expensive and inaccesbile to many. Musician's Mentor bridges this gap by managing an exclusive database of student teachers from top programs across the nation. Students can sign up for an account and browse the directory of teachers to find one who matches their current needs.
+<div align="left">
+  <h2> Description </h2>
+  <p> Musician's Mentor is the first ever online platform built to facilitate affordable, peer-to-peer music lessons. Students can search for accomplished high school and college musicians and filter by various criteria to find the right fit. </p>
+  
+  <h2> Website Link </h2>
+  <p> Coming soon! </p>
 
-## Features
+  <h2> Core Features </h2>
+  <p> 1. JWT authentication to ensure security of users </p>
+  <p> 2. Search filters to browse a directory of accomplished student teachers nationwide by location, instrument, experience level, rate, etc. </p>
+  <p> 3. Contact teachers/students through in-app messaging </p>
 
-- **Supabase PostgreSQL Database:** Stores detailed information about users/students/teachers.
-- **Spring Boot Backend:** Provides a RESTful API to manage user/student/teacher data efficiently. The backend is packaged as a Dockerfile and hosted on Heroku.
-- **React.js Frontend:** A user-friendly interface for completing profiles and searching the teacher database. The frontend is hosted on Vercel.
-
-## Prerequisites
-
-Before running this project locally, ensure you have the following set up:
-
-- Java Development Kit (JDK) 8 or higher
-- Node.js and npm (Node Package Manager)
-- Supabase PostgreSQL database
-- IDE (IntelliJ IDEA, Eclipse, VS Code, etc.)
-
-## Installation
-
-### Backend Setup
-
-1. Clone this repository.
-2. Open the `musiciansmentorbackend` directory in your preferred IDE.
-3. Configure the `application.properties` file in the `src/main/resources` directory with your Supabase database credentials and Email credentials (This application uses Supabase and JWT Authentication and Java Mail Sender, so you'll need to configure the necessary details for these fields. Create a `.env` file with the corresponding variables used in the `application.properties`).
-4. Run the Spring Boot application.
-
-### Frontend Setup
-
-1. Navigate to the `musiciansmentorfrontend` directory in your terminal.
-2. Run `npm install` to install the necessary dependencies.
-3. Create a `.env` file and create a variable `VITE_API_URL` with the appropriate backend API URL.
-4. Run `npm start` to start the ReactJS application.
-
-## Usage
-
-- Access the frontend application via `http://localhost:5173`.
-
-
+  <h2> Tech Stack </h2>
+  <p> Frontend: React + Vite, TypeScript, and TailwindCSS </p> 
+  <p> Backend: Django REST Framework, Python </p> 
+  <p> Image Storage: AWS S3 </p>
+  <p> Database: PostgreSQL </p> 
+  <p> Deployments: Frontend - Vercel | Backend - Heroku | Database - Supabase </p>
+  
+</div>

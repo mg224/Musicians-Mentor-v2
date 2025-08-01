@@ -1,0 +1,10 @@
+asgiref
+Django
+django-extensions
+djangorestframework
+pillow
+sqlparse
+tzdata
+psycopg2-binary
+djangorestframework-simplejwt
+python-decouple
