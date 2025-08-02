@@ -1,7 +1,13 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from rest_framework import generics
+from .serializers import UserSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+User = get_user_model()
 
 # Create your views here.
-
-def hello_api(request):
-    return JsonResponse({"message": "Hello from the API!"})
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]

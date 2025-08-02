@@ -1,10 +1,13 @@
 asgiref
 Django
+django-cors-headers
 django-extensions
 djangorestframework
+djangorestframework-simplejwt
+PyJWT
+pytz
 pillow
 sqlparse
 tzdata
 psycopg2-binary
-djangorestframework-simplejwt
-python-decouple
+python-dotenv
