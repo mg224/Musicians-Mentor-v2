@@ -17,7 +17,7 @@
   <h2> Tech Stack </h2>
   <p> Frontend: React + Vite, TypeScript, and TailwindCSS </p> 
   <p> Backend: Django REST Framework, Python </p> 
-  <p> Image Storage: AWS S3 </p>
+  <p> Image Storage: Supabase S3 </p>
   <p> Database: PostgreSQL </p> 
   <p> Deployments: Frontend - Vercel | Backend - Heroku | Database - Supabase </p>
   
