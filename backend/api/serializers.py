@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from .models import Student, Teacher
 
 User = get_user_model()
 
@@ -26,3 +27,13 @@ class UserSerializer(serializers.ModelSerializer):
             Teacher.objects.create(user=user)
             
         return user
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ["id", "user", "instrument", "grade_level", "location", "bio", "profile_picture"]
+        extra_kwargs = {
+            "user": {
+                "read_only": True
+            }
+        }
