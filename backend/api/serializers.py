@@ -12,13 +12,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "password", "first_name", "last_name", "role"]
     
     def create(self, validated_data):
+        role = validated_data.get("role")
         password = validated_data.pop("password")
 
         user = User(**validated_data)
         user.set_password(password)
         user.save()
         
-        role = validated_data.get("role")
         if role == "student":
             from .models import Student
             Student.objects.create(user=user)
@@ -32,6 +32,16 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ["id", "user", "instrument", "grade_level", "location", "bio", "profile_picture"]
+        extra_kwargs = {
+            "user": {
+                "read_only": True
+            }
+        }
+
+class TeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = ["id", "user", "instrument", "years_experience", "location", "bio", "rate", "profile_picture"]
         extra_kwargs = {
             "user": {
                 "read_only": True
