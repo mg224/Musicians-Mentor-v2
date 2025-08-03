@@ -5,45 +5,36 @@ from .models import Student, Teacher
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
     class Meta:
         model = User
-        fields = ["id", "username", "password", "first_name", "last_name", "role"]
+        fields = ["first_name", "last_name", "username", "password", "role"]
+        extra_kwargs = {"password": {"write_only": True}}
     
     def create(self, validated_data):
         role = validated_data.get("role")
-        password = validated_data.pop("password")
 
-        user = User(**validated_data)
-        user.set_password(password)
+        user = User(first_name=validated_data["first_name"], last_name=validated_data["last_name"], username=validated_data["username"], role=validated_data["role"])
+        user.set_password(validated_data["password"])
         user.save()
-        
+
         if role == "student":
-            from .models import Student
             Student.objects.create(user=user)
         elif role == "teacher":
-            from .models import Teacher
             Teacher.objects.create(user=user)
-            
+        
         return user
 
+
 class StudentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Student
-        fields = ["id", "user", "instrument", "grade_level", "location", "bio", "profile_picture"]
-        extra_kwargs = {
-            "user": {
-                "read_only": True
-            }
-        }
+        fields = ["user", "id", "instrument", "grade_level", "location", "bio", "profile_picture"]
 
 class TeacherSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Teacher
-        fields = ["id", "user", "instrument", "years_experience", "location", "bio", "rate", "profile_picture"]
-        extra_kwargs = {
-            "user": {
-                "read_only": True
-            }
-        }
+        fields = ["user", "id", "instrument", "years_experience", "location", "bio", "rate", "profile_picture"]

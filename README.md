@@ -4,7 +4,7 @@
 
 <div align="left">
   <h2> Description </h2>
-  <p> Musician's Mentor is the first ever online platform built to facilitate affordable, peer-to-peer music lessons. Students can search for accomplished high school and college musicians and filter by various criteria to find the right fit. </p>
+  <p> Musician's Mentor is the first online platform built to facilitate affordable, peer-to-peer music lessons. Students can search for accomplished high school and college musicians and filter by various criteria to find the right fit. </p>
   
   <h2> Website Link </h2>
   <p> Coming soon! </p>
@@ -19,6 +19,6 @@
   <p> Backend: Django REST Framework, Python </p> 
   <p> Image Storage: Supabase S3 </p>
   <p> Database: PostgreSQL </p> 
-  <p> Deployments: Frontend - Vercel | Backend - Heroku | Database - Supabase </p>
+  <p> Deployments: Frontend - Vercel | Backend - Render | Database - Supabase </p>
   
 </div>

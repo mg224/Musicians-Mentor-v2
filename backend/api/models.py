@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
 GRADE_CHOICES = [
     (1, "1st Grade"),
     (2, "2nd Grade"),
