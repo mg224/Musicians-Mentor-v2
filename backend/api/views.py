@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import StudentSerializer, TeacherSerializer, UserSerializer
 from .models import Student, Teacher
+from .utils import upload_to_supabase_storage, delete_from_supabase_storage
 
 User = get_user_model()
 
@@ -65,11 +66,24 @@ class UserProfileView(APIView):
             except Student.DoesNotExist:
                 return Response({"detail": "Student profile not found."}, status=status.HTTP_404_NOT_FOUND)
             
+            old_profile_picture = student_profile.profile_picture
+            
+            if "profile_picture" in request.FILES:
+                success, result = upload_to_supabase_storage(request.FILES["profile_picture"])
+                if success:
+                    request.data["profile_picture"] = result
+                    if old_profile_picture:
+                        delete_success, delete_message = delete_from_supabase_storage(old_profile_picture)
+                        if not delete_success:
+                            print(f"Warning: Could not delete old profile picture: {delete_message}")
+                else:
+                    return Response({"error": result}, status=status.HTTP_400_BAD_REQUEST)
+            
             serializer = StudentSerializer(student_profile, data=request.data, partial=True)
 
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.data)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -79,16 +93,28 @@ class UserProfileView(APIView):
             except Teacher.DoesNotExist:
                 return Response({"detail": "Teacher profile not found."}, status=status.HTTP_404_NOT_FOUND)
             
+            old_profile_picture = teacher_profile.profile_picture
+            
+            if "profile_picture" in request.FILES:
+                success, result = upload_to_supabase_storage(request.FILES["profile_picture"])
+                if success:
+                    request.data["profile_picture"] = result
+                    if old_profile_picture:
+                        delete_success, delete_message = delete_from_supabase_storage(old_profile_picture)
+                        if not delete_success:
+                            print(f"Warning: Could not delete old profile picture: {delete_message}")
+                else:
+                    return Response({"error": result}, status=status.HTTP_400_BAD_REQUEST)
+            
             serializer = TeacherSerializer(teacher_profile, data=request.data, partial=True)
 
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.data)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(status=status.HTTP_400_BAD_REQUEST)
-        
 
 class StudentView(APIView):
     permission_classes = [IsAuthenticated]
@@ -103,38 +129,18 @@ class StudentView(APIView):
         
         return Response(serializer.data)
 
-    def put(self, request, student_id=None):
-        student = get_object_or_404(Student, pk=student_id)
-        serializer = StudentSerializer(student, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class TeacherView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, teacher_id=None):
         if teacher_id:
-            teacher = get_object_or_404(Student, pk=teacher_id)
+            teacher = get_object_or_404(Teacher, pk=teacher_id)
             serializer = TeacherSerializer(teacher)
         else:
             teachers = Teacher.objects.all()
             serializer = TeacherSerializer(teachers, many=True)
         
         return Response(serializer.data)
-
-    def put(self, request, teacher_id=None):
-        teacher = get_object_or_404(Teacher, pk=teacher_id)
-        serializer = TeacherSerializer(teacher, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
