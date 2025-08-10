@@ -146,7 +146,7 @@ export default function UserDashboard() {
               <p>Complete your profile to increase your credibility and chances of connecting with students!</p>
             )}
             {studentProfile && (
-              <p>Complete your profile if you'd like us to suggest some teachers who might meet your criteria!</p>
+              <p>Complete your profile if you'd like us to suggest some teachers who might meet your criteria! (Feature coming soon!)</p>
             )}
           </div>
         )}

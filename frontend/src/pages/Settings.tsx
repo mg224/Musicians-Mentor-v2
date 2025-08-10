@@ -250,7 +250,7 @@ export default function Settings() {
           <h1 className="text-3xl font-bold text-gray-800">Profile Settings</h1>
           <p className="text-gray-600 mt-2">Update your profile information and preferences.</p>
           {studentProfile && (
-            <p className="text-gray-600 mt-2 text-xs">Feel free to fill in as many fields as you'd like, as they're all optional. However, if you do choose to fill out at least your basic information, we can provide some teacher recommendations.</p>
+            <p className="text-gray-600 mt-2 text-xs">Feel free to fill in as many fields as you'd like, as they're all optional. However, if you do choose to fill out at least your basic information, we can provide some teacher recommendations. (Feature coming soon!) </p>
           )}
           {teacherProfile && (
             <p className="text-gray-600 mt-2 text-xs">We highly recommend teachers fill out all fields to increase the chances of connecting with students!</p>
@@ -488,7 +488,7 @@ export default function Settings() {
                   placeholder={
                     studentProfile 
                       ? "Tell us about your musical journey, goals, and what you hope to achieve."
-                      : "Share your teaching philosophy, musical experience, and what makes you passionate about music education. Feel free to include anything you might feel would be useful for potential students to know about you."
+                      : "Share your teaching philosophy and musical experience. Some examples include: your lessons duration/format, books/pieces you use, specific subareas of expertise within your instrument (orchestra, wind band, chorus, opera, etc.), and more! Feel free to include anything you might feel would be useful for potential students to know about you."
                   }
                 />
               </div>

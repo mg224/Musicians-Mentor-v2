@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import TeacherFilter
 from .serializers import StudentSerializer, TeacherSerializer, UserSerializer
 from .models import Student, Teacher
 from .utils import upload_to_supabase_storage, delete_from_supabase_storage
@@ -146,6 +148,13 @@ class TeacherView(APIView):
             serializer = TeacherSerializer(teachers, many=True)
         
         return Response(serializer.data)
+
+class TeacherSearchView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TeacherSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_class = TeacherFilter
+    queryset = Teacher.objects.all()
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

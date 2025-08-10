@@ -10,8 +10,9 @@ urlpatterns = [
     path("logout/", views.LogoutView.as_view(), name="logout"),
     path("me/profile/", views.UserProfileView.as_view(), name="user_profile"),
     path("students/", views.StudentView.as_view(), name="students"),
-    path("students/<int:student_id>", views.StudentView.as_view(), name="students"),
+    path("students/<int:student_id>/", views.StudentView.as_view(), name="students"),
     path("teachers/", views.TeacherView.as_view(), name="teachers"),
-    path("teachers/<int:teacher_id>", views.TeacherView.as_view(), name="teachers"),
+    path("teachers/<int:teacher_id>/", views.TeacherView.as_view(), name="teachers"),
+    path("teachers/search/", views.TeacherSearchView.as_view(), name="teachers"),
     path("ping/", views.ping, name="ping"),
 ]
