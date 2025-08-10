@@ -1,4 +1,5 @@
 import { Music } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export default function Footer() {
   
@@ -11,7 +12,7 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms & Conditions</a></li>
+              <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
             </ul>
           </div>
           <div>

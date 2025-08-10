@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom"
 import { jwtDecode } from "jwt-decode"
-import { ACCESS_TOKEN } from "../constants"
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants"
 import { useState, useEffect} from "react"
 import type { ReactNode } from "react"
+import api from "../utils/api"
 
 interface ProtectedRouteProps {
   children: ReactNode
@@ -15,6 +16,25 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     auth().catch(() => setIsAuthorized(false))
   }, [])
 
+  const refresh = async () => {
+    const refreshToken = sessionStorage.getItem(REFRESH_TOKEN)
+
+    try {
+      const res = await api.post("/api/token/refresh/", {
+        refresh: refreshToken
+      })
+      if (res.status === 200) {
+        sessionStorage.setItem(ACCESS_TOKEN, res.data.access)
+        setIsAuthorized(true)
+      } else {
+        setIsAuthorized(false)
+      }
+    } catch (error) {
+      console.log(error)
+      setIsAuthorized(false)
+    }
+  }
+
   const auth = async () => {
     const token = sessionStorage.getItem(ACCESS_TOKEN)
 
@@ -23,25 +43,21 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       return
     }
 
-    try {
-      const decoded = jwtDecode(token)
-      const tokenExpiration = decoded.exp
-      const currentTimeInSeconds = Math.floor(Date.now() / 1000) // Convert milliseconds to seconds
+    const decoded = jwtDecode(token)
+    const tokenExpiration = decoded.exp
+    const now = Date.now() / 1000
 
-      if (!tokenExpiration) {
-        setIsAuthorized(false)
-        return
-      }
-
-      if (tokenExpiration > currentTimeInSeconds) {
-        setIsAuthorized(true)
-      } else {
-        setIsAuthorized(false)
-      }
-    } catch (error) {
-      console.error("Error decoding token:", error)
+    if (!tokenExpiration) {
       setIsAuthorized(false)
+      return
     }
+
+    if (tokenExpiration < now) {
+      await refresh()
+    } else {
+      setIsAuthorized(true)
+    }
+    
   }
 
   if (isAuthorized === null) {
@@ -52,5 +68,5 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     )
   }
 
-    return isAuthorized ? children : <Navigate to="/login" />
+  return isAuthorized ? children : <Navigate to="/login" />
 }

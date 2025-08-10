@@ -4,8 +4,10 @@ import LandingPage from "./pages/LandingPage"
 import UserDashboard from "./pages/UserDashboard"
 import LoginPage from "./pages/Login"
 import RegisterPage from "./pages/Register"
-import VerifyAccountPage from "./pages/Verify"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Search from "./pages/Search"
+import SettingsPage from "./pages/Settings"
+import TermsAndConditions from "./pages/TermsAndCondiitons"
 
 function App() {
 
@@ -24,16 +26,34 @@ function App() {
           path="/signup"
           element={<RegisterPage />}
         />
-        <Route
-          path="/verify"
-          element={<VerifyAccountPage />}
-        />
         <Route 
           path="/dashboard" 
           element={
             <ProtectedRoute>
               <UserDashboard />
             </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/search" 
+          element={
+            <ProtectedRoute>
+              <Search />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/settings" 
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/terms" 
+          element={
+            <TermsAndConditions />
           } 
         />
         <Route 

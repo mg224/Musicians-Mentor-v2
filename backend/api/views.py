@@ -71,11 +71,13 @@ class UserProfileView(APIView):
             if "profile_picture" in request.FILES:
                 success, result = upload_to_supabase_storage(request.FILES["profile_picture"])
                 if success:
-                    request.data["profile_picture"] = result
                     if old_profile_picture:
                         delete_success, delete_message = delete_from_supabase_storage(old_profile_picture)
                         if not delete_success:
                             print(f"Warning: Could not delete old profile picture: {delete_message}")
+                    
+                    request.data._mutable = True
+                    request.data["profile_picture"] = result
                 else:
                     return Response({"error": result}, status=status.HTTP_400_BAD_REQUEST)
             
@@ -98,11 +100,14 @@ class UserProfileView(APIView):
             if "profile_picture" in request.FILES:
                 success, result = upload_to_supabase_storage(request.FILES["profile_picture"])
                 if success:
-                    request.data["profile_picture"] = result
                     if old_profile_picture:
                         delete_success, delete_message = delete_from_supabase_storage(old_profile_picture)
                         if not delete_success:
                             print(f"Warning: Could not delete old profile picture: {delete_message}")
+                    
+                    request.data_mutable = True
+                    request.data["profile_picture"] = result
+
                 else:
                     return Response({"error": result}, status=status.HTTP_400_BAD_REQUEST)
             

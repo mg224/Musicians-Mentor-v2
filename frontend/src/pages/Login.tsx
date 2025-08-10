@@ -1,26 +1,27 @@
-import React, { useState, type ChangeEvent } from "react"
-import { Music, Eye, EyeOff, Mail, Lock, User, ArrowLeft, GraduationCap, BookOpen } from "lucide-react"
+import React, { useState } from "react"
+import { Music, Eye, EyeOff, Lock, User, ArrowLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
-import api from "../api"
-import { ACCESS_TOKEN } from "../constants"
+import { toast, ToastContainer } from "react-toastify"
+import api from "../utils/api"
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants"
 
 interface FormData {
-  email: string
+  username: string
   password: string
 }
 
 interface FormErrors {
-  email?: string
+  username?: string
   password?: string
 }
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState<FormData>({
-    email: "",
+    username: "",
     password: "",
   })
+  const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
   const navigate = useNavigate()
 
@@ -39,10 +40,8 @@ export default function LoginPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
 
-    if (!formData.email) {
-      newErrors.email = "Email is required"
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email"
+    if (!formData.username) {
+      newErrors.username = "Username is required"
     }
 
     if (!formData.password) {
@@ -63,18 +62,37 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await api.post("/auth/login", formData)
-      console.log(res)
+      setLoading(true)
+      const res = await api.post("/api/login/", formData)
       toast.success("Logged in successfully!")
-      sessionStorage.setItem(ACCESS_TOKEN, res.data.token)
+      sessionStorage.setItem(ACCESS_TOKEN, res.data.access)
+      sessionStorage.setItem(REFRESH_TOKEN, res.data.refresh)
       navigate("/dashboard")
     } catch (error) {
-      alert(error)
+      console.error(error)
+
+      const message = error instanceof Error ? error.message : 'An error occurred'
+      toast.error(`Login failed: ${message}`)
+
+    } finally {
+      setLoading(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-500"></div>
+          <p className="mt-4 text-gray-600">Logging in...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <ToastContainer />
       {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-pink-200 rounded-full opacity-20 animate-pulse"></div>
@@ -103,29 +121,29 @@ export default function LoginPage() {
         <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
           <div className="space-y-6">
 
-            {/* Email */}
+            {/* Username */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                Username
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
+                  <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
+                  id="username"
+                  name="username"
+                  type="text"
+                  value={formData.username}
                   onChange={handleInputChange}
                   className={`block w-full pl-10 pr-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
+                    errors.username ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="Enter your email"
+                  placeholder="Enter your username"
                 />
               </div>
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600 animate-fade-in">{errors.email}</p>
+              {errors.username && (
+                <p className="mt-1 text-sm text-red-600 animate-fade-in">{errors.username}</p>
               )}
             </div>
 

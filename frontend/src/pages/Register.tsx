@@ -1,19 +1,23 @@
 import React, { useState } from "react"
 import { Music, Eye, EyeOff, Mail, Lock, User, ArrowLeft, GraduationCap, BookOpen } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
-import api from "../api"
-import { toast } from "react-toastify"
+import api from "../utils/api"
+import { toast, ToastContainer } from "react-toastify"
 
-type AccountType = 'STUDENT' | 'TEACHER'
+type AccountType = 'student' | 'teacher'
 
 interface FormData {
+  first_name: string
+  last_name: string
   email: string
   username: string
   password: string
-  accountType: AccountType
+  role: AccountType
 }
 
 interface FormErrors {
+  first_name?: string
+  last_name?: string
   email?: string
   username?: string
   password?: string
@@ -22,13 +26,16 @@ interface FormErrors {
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState<FormData>({
+    first_name: "",
+    last_name: "",
     email: "",
     username: "",
     password: "",
-    accountType: "STUDENT"
+    role: "student"
   })
+  const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
   const [confirmPassword, setConfirmPassowrd] = useState<string>("")
   const navigate = useNavigate()
@@ -47,6 +54,14 @@ export default function RegisterPage() {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
+
+    if (!formData.first_name) {
+      newErrors.first_name = "First name is required"
+    }
+
+    if (!formData.last_name) {
+      newErrors.last_name = "Last name is required"
+    }
 
     if (!formData.email) {
       newErrors.email = "Email is required"
@@ -80,17 +95,31 @@ export default function RegisterPage() {
     }
 
     try {
-      const res = await api.post("/auth/signup", formData)
-      console.log(res)
+      setLoading(true)
+      const res = await api.post("/api/register/", formData)
       toast.success("Account created successfully!")
-      navigate("/verify")
+      navigate("/login")
     } catch (error) {
       alert(error)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-500"></div>
+          <p className="mt-4 text-gray-600">Creating profile...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <ToastContainer />
       {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-pink-200 rounded-full opacity-20 animate-pulse"></div>
@@ -125,9 +154,9 @@ export default function RegisterPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setFormData(prev => ({...prev, accountType: 'STUDENT'}))}
+                  onClick={() => setFormData(prev => ({...prev, role: 'student'}))}
                   className={`flex flex-col items-center p-4 border-2 rounded-xl transition-all duration-300 cursor-pointer ${
-                    formData.accountType === 'STUDENT'
+                    formData.role === 'student'
                       ? 'border-purple-500 bg-purple-50 text-purple-700'
                       : 'border-gray-200 hover:border-purple-300 text-gray-600'
                   }`}
@@ -137,9 +166,9 @@ export default function RegisterPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData(prev => ({...prev, accountType: 'TEACHER'}))}
+                  onClick={() => setFormData(prev => ({...prev, role: 'teacher'}))}
                   className={`flex flex-col items-center p-4 border-2 rounded-xl transition-all duration-300 cursor-pointer ${
-                    formData.accountType === 'TEACHER'
+                    formData.role === 'teacher'
                       ? 'border-purple-500 bg-purple-50 text-purple-700'
                       : 'border-gray-200 hover:border-purple-300 text-gray-600'
                   }`}
@@ -148,6 +177,58 @@ export default function RegisterPage() {
                   <span className="font-medium">Teacher</span>
                 </button>
               </div>
+            </div>
+
+            {/* First Name */}
+            <div className="transform transition-all duration-300 ease-in-out">
+              <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
+                First Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="first_name"
+                  name="first_name"
+                  type="text"
+                  value={formData.first_name}
+                  onChange={handleInputChange}
+                  className={`block w-full pl-10 pr-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                    errors.first_name ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="Enter your first name"
+                />
+              </div>
+              {errors.first_name && (
+                <p className="mt-1 text-sm text-red-600 animate-fade-in">{errors.first_name}</p>
+              )}
+            </div>
+
+            {/* Last Name */}
+            <div className="transform transition-all duration-300 ease-in-out">
+              <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-2">
+                Last Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="last_name"
+                  name="last_name"
+                  type="text"
+                  value={formData.last_name}
+                  onChange={handleInputChange}
+                  className={`block w-full pl-10 pr-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                    errors.last_name ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="Enter your last name"
+                />
+              </div>
+              {errors.last_name && (
+                <p className="mt-1 text-sm text-red-600 animate-fade-in">{errors.last_name}</p>
+              )}
             </div>
 
             {/* Email */}

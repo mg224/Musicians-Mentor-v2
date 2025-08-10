@@ -7,13 +7,13 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "username", "password", "role"]
+        fields = ["first_name", "last_name", "email", "username", "password", "role"]
         extra_kwargs = {"password": {"write_only": True}}
     
     def create(self, validated_data):
         role = validated_data.get("role")
 
-        user = User(first_name=validated_data["first_name"], last_name=validated_data["last_name"], username=validated_data["username"], role=validated_data["role"])
+        user = User(first_name=validated_data["first_name"], last_name=validated_data["last_name"], username=validated_data["username"], email=validated_data["email"], role=validated_data["role"])
         user.set_password(validated_data["password"])
         user.save()
 
@@ -23,7 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
             Teacher.objects.create(user=user)
         
         return user
-
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
