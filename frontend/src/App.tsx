@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import Search from "./pages/Search"
 import SettingsPage from "./pages/Settings"
 import TermsAndConditions from "./pages/TermsAndCondiitons"
-import TeacherPage from "./pages/TeacherProfile"
+import TeacherPage from "./pages/TeacherPage"
 
 function App() {
 
@@ -44,7 +44,7 @@ function App() {
           } 
         />
         <Route 
-          path="/teacher/:teacherId" 
+          path="/teacherPage/:teacherId" 
           element={
             <ProtectedRoute>
               <TeacherPage />

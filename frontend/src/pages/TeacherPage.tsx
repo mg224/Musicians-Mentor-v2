@@ -2,15 +2,18 @@ import React, { act, useEffect, useState } from 'react'
 import { Music, Bell, Settings, LogOut, User,  MapPin, Award, Clock, DollarSign, GraduationCap, CircleAlert, Mail } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { type TeacherProfile } from '../utils/types'
+import { type StudentProfile, type TeacherProfile } from '../utils/types'
 import api from '../utils/api'
 import { Link, useParams } from 'react-router-dom'
 
 export default function TeacherPage() {
   const { teacherId } = useParams()
+  const [studentUserProfile, setStudentUserProfile] = useState<StudentProfile | null>(null)
+  const [teacherUserProfile, setTeacherUserProfile] = useState<TeacherProfile | null>(null)
   const [teacherProfile, setTeacherProfile] = useState<TeacherProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const activeProfile = studentUserProfile || teacherUserProfile
 
   if (!teacherId) {
     return (
@@ -23,12 +26,44 @@ export default function TeacherPage() {
   }
 
   useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const res = await api.get("/api/me/profile/")
+
+        if (res.status !== 200) {
+          throw new Error('Failed to fetch user profile')
+        }
+        
+        const userData = res.data
+
+        if (userData.user.role === "student") {
+          setStudentUserProfile(userData)
+        } else if (userData.user.role === "teacher") {
+          setTeacherUserProfile(userData)
+        }
+
+      } catch (error) {
+        console.log(error)
+
+        if (error instanceof Error) {
+          setError(error.message)
+        } else {
+          setError("Failed to load user profile.")
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+
     const fetchTeacherProfile = async () => {
       try {
         setLoading(true)
         setError(null)
 
-        const res = await api.get(`/teachers/${teacherId}`)
+        const res = await api.get(`/api/teachers/${teacherId}/`)
 
         if (res.status !== 200) {
           throw new Error('Failed to fetch user profile')
@@ -49,11 +84,9 @@ export default function TeacherPage() {
       }
     }
 
+    fetchUserProfile()
     fetchTeacherProfile()
 
-    return () => {
-      console.log('🧹 UserDashboard component unmounting')
-    }
   }, [])
 
   if (loading) {
@@ -83,6 +116,16 @@ export default function TeacherPage() {
     )
   }
 
+  if (!activeProfile) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center bg-white rounded-lg p-8 shadow-lg">
+          <p className="text-gray-600">No profile data available</p>
+        </div>
+      </div>
+    )
+  }
+
   if (!teacherProfile) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
@@ -102,9 +145,9 @@ export default function TeacherPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 overflow-hidden">
       <Navbar
-        userName={`${teacherProfile.user.first_name} ${teacherProfile.user.last_name}`}
-        userRole={teacherProfile.user.role}
-        userAvatar={teacherProfile.profile_picture}
+        userName={`${activeProfile.user.first_name} ${activeProfile.user.last_name}`}
+        userRole={activeProfile.user.role}
+        userAvatar={activeProfile.profile_picture}
       />
 
       <div className="container mx-auto px-4 py-8">

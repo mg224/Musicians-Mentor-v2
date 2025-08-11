@@ -153,8 +153,13 @@ class TeacherSearchView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TeacherSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_class = TeacherFilter
-    queryset = Teacher.objects.all()
+    filterset_class = TeacherFilter
+    queryset = Teacher.objects.all().order_by('id')
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        print("Teacher queryset:", qs)  # Logs queryset in console
+        return qs
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

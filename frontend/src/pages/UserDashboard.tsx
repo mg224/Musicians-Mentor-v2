@@ -48,10 +48,7 @@ export default function UserDashboard() {
     }
 
     fetchUserProfile()
-
-    return () => {
-      console.log('🧹 UserDashboard component unmounting')
-    }
+    
   }, [])
 
   if (loading) {
