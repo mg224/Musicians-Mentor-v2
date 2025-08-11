@@ -131,7 +131,7 @@ export default function RegisterPage() {
       </div>
 
       <div className="max-w-md w-full space-y-8 z-10">
-        {/* Header */}
+
         <div className="text-center">
           <div className="flex justify-center items-center space-x-3 mb-4">
             <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-3 rounded-full">
@@ -357,7 +357,7 @@ export default function RegisterPage() {
               )}
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="button"
               onClick={handleSubmit}

@@ -9,6 +9,7 @@ import Search from "./pages/Search"
 import SettingsPage from "./pages/Settings"
 import TermsAndConditions from "./pages/TermsAndCondiitons"
 import TeacherPage from "./pages/TeacherPage"
+import Contact from "./pages/Contact"
 
 function App() {
 
@@ -63,6 +64,12 @@ function App() {
           path="/terms" 
           element={
             <TermsAndConditions />
+          } 
+        />
+        <Route 
+          path="/contact" 
+          element={
+            <Contact />
           } 
         />
         <Route 
