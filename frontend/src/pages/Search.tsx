@@ -3,12 +3,25 @@ import { ToastContainer } from 'react-toastify'
 import Navbar from '../components/Navbar'
 import api from '../utils/api'
 import type { StudentProfile, TeacherProfile } from '../utils/types'
+import { BookOpen, MapPin, User, DollarSign, Calendar, SearchIcon, Link } from 'lucide-react'
 
 export default function Search() {
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null)
   const [teacherProfile, setTeacherProfile] = useState<TeacherProfile | null>(null)
+  const [teachers, setTeachers] = useState<TeacherProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchError, setSearchError] = useState("")
+  const [hasSearched, setHasSearched] = useState(false)
+  const [searchParams, setSearchParams] = useState({
+    instrument: "",
+    location: "",
+    bio: "",
+    rate_min: "",
+    rate_max: "",
+    years_experience_min: "",
+    years_experience_max: ""
+  })
 
   const activeProfile = studentProfile || teacherProfile
 
@@ -48,36 +61,77 @@ export default function Search() {
     fetchUserProfile()
   }, [])
 
-  // Mock user data
-  const exampleStudent = {
-    user: {
-      first_name: "Jane",
-      last_name: "Doe",
-      email: "janedoe@gmail.com",
-      username: "janedoe1",
-      role: "student"
-    },
-    location: "Atlanta, GA",
-    instrument: "Guitar",
-    grade_level: 6,
-    bio: "Beginner musician who wants to improve as an amateur guitar player.",
-    profile_picture: "https://images.unsplash.com/photo-1494790108755-2616b332c767?w=150&h=150&fit=crop&crop=face",
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setSearchParams(prev => ({...prev, [name]: value}))
   }
 
-  const exampleTeacher = {
-    user: {
-      first_name: "John",
-      last_name: "Doe",
-      email: "johndoe@gmail.com",
-      username: "johndoe1",
-      role: "teacher"
-    },
-    location: "Atlanta, GA",
-    instrument: "Piano",
-    years_experience: 5,
-    bio: "Passionate musician with 5 years of piano experience and 3 years of guitar. Love helping beginners discover the joy of music!",
-    rate: 20.00,
-    profile_picture: "https://images.unsplash.com/photo-1494790108755-2616b332c767?w=150&h=150&fit=crop&crop=face",
+  const buildQueryString = () => {
+    const params = new URLSearchParams()
+
+    if (searchParams.instrument.trim()) {
+      params.append("instrument__icontains", searchParams.instrument.trim())
+    }
+    if (searchParams.location.trim()) {
+      params.append("location__icontains", searchParams.location.trim())
+    }
+    if (searchParams.bio.trim()) {
+      params.append("bio__icontains", searchParams.bio.trim())
+    }
+
+    if (searchParams.years_experience_min.trim()) {
+      params.append("years_experience__lte", searchParams.years_experience_min)
+    }
+    if (searchParams.years_experience_max.trim()) {
+      params.append("years_experience__gte", searchParams.years_experience_max.trim())
+    }
+
+    return params.toString()
+  }
+
+  const clearSearch = () => {
+    setSearchParams({
+      instrument: "",
+      location: "",
+      bio: "",
+      rate_min: "",
+      rate_max: "",
+      years_experience_min: "",
+      years_experience_max: ""
+    })
+    setTeachers([])
+    setError("")
+    setHasSearched(false)
+  }
+
+  const handleSearch = async () => {
+    setLoading(true)
+    setHasSearched(true)
+
+    try {
+      const queryString = buildQueryString()
+
+      const res = await api.get(`/api/teachers/search/?${queryString}`)
+
+      if (res.status !== 200) {
+        throw new Error('Failed to fetch teachers')
+      }
+
+      const teacherData = res.data
+      setTeachers(teacherData)
+
+    } catch (error) {
+      console.log(error)
+
+      if (error instanceof Error) {
+        setSearchError(error.message)
+      } else {
+        setSearchError("Failed to load user profile.")
+      }
+
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (loading) {
@@ -126,7 +180,180 @@ export default function Search() {
         userAvatar={activeProfile.profile_picture}
       />
 
-      Search!
+      <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-8 mb-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Find Teachers</h2>
+        
+        {/* Search Form */}
+        <div className="p-6 rounded-lg mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {/* Instrument Search */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <BookOpen className="inline w-4 h-4 mr-1" />
+                Instrument
+              </label>
+              <input
+                type="text"
+                name="instrument"
+                value={searchParams.instrument}
+                onChange={handleInputChange}
+                placeholder="e.g., Piano, Guitar, Violin"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+
+            {/* Location Search */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <MapPin className="inline w-4 h-4 mr-1" />
+                Location
+              </label>
+              <input
+                type="text"
+                name="location"
+                value={searchParams.location}
+                onChange={handleInputChange}
+                placeholder="e.g., New York, Online"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+
+            {/* Bio/Keywords Search */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <User className="inline w-4 h-4 mr-1" />
+                Keywords in Bio
+              </label>
+              <input
+                type="text"
+                name="bio"
+                value={searchParams.bio}
+                onChange={handleInputChange}
+                placeholder="e.g., jazz, classical, orchestra, band, choir"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+          </div>
+
+          {/* Rate Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Min Rate
+              </label>
+              <input
+                type="number"
+                name="rate_min"
+                value={searchParams.rate_min}
+                onChange={handleInputChange}
+                placeholder="30"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Max Rate
+              </label>
+              <input
+                type="number"
+                name="rate_max"
+                value={searchParams.rate_max}
+                onChange={handleInputChange}
+                placeholder="100"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+          </div>
+
+          {/* Experience Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Min Years Experience
+              </label>
+              <input
+                type="number"
+                name="years_experience_min"
+                value={searchParams.years_experience_min}
+                onChange={handleInputChange}
+                placeholder="2"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Max Years Experience
+              </label>
+              <input
+                type="number"
+                name="years_experience_max"
+                value={searchParams.years_experience_max}
+                onChange={handleInputChange}
+                placeholder="20"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-end">
+            <button
+              onClick={clearSearch}
+              className="px-6 py-3 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-center cursor-pointer"
+            >
+              Clear
+            </button>
+            <button
+              onClick={handleSearch}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 bg-purple-500 hover:bg-purple-600 disabled:bg-purple-300 text-white px-6 py-3 rounded-lg transition-colors cursor-pointer"
+            >
+              <SearchIcon className="w-5 h-5" />
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {hasSearched && (
+        <div>
+          <h3 className="text-3xl text-center font-semibold text-gray-800 mb-4">
+            Search Results
+          </h3>
+
+          {teachers.length === 0 ? (
+            <div className="text-center text-gray-500 py-8">
+              No teachers found matching your criteria. Try adjusting your search parameters.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {teachers.map(teacher => (
+                <Link 
+                  to={`/teacherPage/${teacher.id}`} 
+                  key={teacher.id} 
+                  className="bg-white border border-gray-200 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                  {teacher.profile_picture && (
+                    <img
+                      src={teacher.profile_picture}
+                      alt={`${teacher.user.first_name} ${teacher.user.last_name}`}
+                      className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+                    />
+                  )}
+                  <h4 className="text-lg font-semibold text-center mb-2">
+                    {teacher.user.first_name} {teacher.user.last_name}
+                  </h4>
+                  <div className="space-y-2 text-sm text-gray-600">
+                    <p><span className="font-medium">Instrument:</span> {teacher.instrument}</p>
+                    <p><span className="font-medium">Rate:</span> ${teacher.rate}/hour</p>
+                    <p><span className="font-medium">Location:</span> {teacher.location}</p>
+                    <p><span className="font-medium">Experience:</span> {teacher.years_experience} years</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

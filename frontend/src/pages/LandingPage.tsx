@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Music, Users, Play, UserPlus, Heart, Award, BookOpen, MessageCircle, type LucideIcon } from 'lucide-react'
+import { Music, Users, Play, UserPlus, Heart, Award, BookOpen, MessageCircle, DollarSign, Handshake, type LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface Feature {
@@ -24,14 +24,14 @@ export default function LandingPage() {
 
   const features: Feature[] = [
     { icon: Award, title: "Experienced Teachers", desc: "Connect with skilled musicians who are passionate about teaching" },
-    { icon: Heart, title: "Affordable Learning", desc: "Peer-to-peer lessons mean lower costs for students and better opportunities for mentors." },
+    { icon: DollarSign, title: "Affordable Learning", desc: "Peer-to-peer lessons mean lower costs for students and better opportunities for mentors." },
     { icon: UserPlus, title: "Easy Matching", desc: "Simple profiles and intuitive matching tools for students to find teachers" },
     { icon: Heart, title: "Free & Inclusive", desc: "A free-to-join, inclusive community that supports musical growth and creativity" }
   ]
 
   const howItWorks: HowItWorksStep[] = [
-    { step: "1", title: "Browse Mentors", desc: "Explore profiles of talented student musicians in your area or online", icon: BookOpen },
-    { step: "2", title: "Connect & Chat", desc: "Connect with musicians to find the perfect match for your learning style", icon: MessageCircle },
+    { step: "1", title: "Browse Teachers", desc: "Explore profiles of talented student musicians in your area or online", icon: BookOpen },
+    { step: "2", title: "Connect & Chat", desc: "Connect with musicians to find the perfect match for your learning style", icon: Handshake },
     { step: "3", title: "Start Learning", desc: "Schedule affordable lessons and begin your musical journey", icon: Music }
   ]
 
@@ -189,7 +189,7 @@ export default function LandingPage() {
             Ready to Start?
           </h3>
           <p className="text-xl mb-8 opacity-90">
-            Whether you're a beginner looking for a private teacher or an experienced musician looking to share your knowledge, join our community to help increase accessibility to music education for all
+            Whether you're a beginner looking for a private teacher or an experienced musician looking to share your knowledge, join our community to help increase accessibility to music education for all.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 

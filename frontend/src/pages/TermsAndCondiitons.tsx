@@ -1,5 +1,5 @@
 import React from 'react'
-import { Shield, Users, MessageSquare, ExternalLink, ArrowLeft } from 'lucide-react'
+import { Shield, Users, MessageSquare, ExternalLink, ArrowLeft, User } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
@@ -40,7 +40,7 @@ export default function TermsAndConditions() {
                 </div>
                 <h2 className="text-2xl font-semibold text-gray-800">Platform Purpose</h2>
               </div>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 p-4">
                 Our platform serves as a connection facilitator between music students and teachers. 
                 We provide a space where users can create profiles and discover potential music education opportunities. 
                 Our role is limited to facilitating these initial connections.
@@ -56,17 +56,17 @@ export default function TermsAndConditions() {
                 <h2 className="text-2xl font-semibold text-gray-800">Profile Visibility</h2>
               </div>
               <div className="space-y-4">
-                <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-                  <h3 className="font-semibold text-blue-800 mb-2">Teacher Profiles</h3>
-                  <p className="text-blue-700">
+                <div className="p-4 rounded-r-lg">
+                  <h3 className="font-semibold mb-2">Teacher Profiles</h3>
+                  <p>
                     Teacher profiles are publicly searchable and viewable by all users on the platform. 
                     This visibility is essential for students to find and connect with potential instructors.
                   </p>
                 </div>
                 
-                <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
-                  <h3 className="font-semibold text-amber-800 mb-2">Student Profiles</h3>
-                  <p className="text-amber-700">
+                <div className="p-4 rounded-r-lg">
+                  <h3 className="font-semibold mb-2">Student Profiles</h3>
+                  <p>
                     While student profiles are not explicitly searchable through our platform's search functionality, 
                     they may still be discoverable through other means. We cannot guarantee complete privacy of any profile information.
                   </p>
@@ -82,11 +82,11 @@ export default function TermsAndConditions() {
                 </div>
                 <h2 className="text-2xl font-semibold text-gray-800">External Communications and Transactions</h2>
               </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className="text-gray-600 leading-relaxed mb-4 p-4">
                 Once users connect through our platform and begin communicating outside of our website, 
                 all subsequent interactions, arrangements, and transactions are entirely between the users involved.
               </p>
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
+              <div className="p-4 rounded-r-lg">
                 <p className="text-red-700">
                   <strong>Important:</strong> We are not responsible for any agreements, payments, services, 
                   disputes, or issues that arise from communications or transactions that occur outside of our platform.
@@ -102,7 +102,7 @@ export default function TermsAndConditions() {
                 </div>
                 <h2 className="text-2xl font-semibold text-gray-800">Limitation of Liability</h2>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-4 p-4">
                 <p className="text-gray-600 leading-relaxed">
                   By using our platform, you acknowledge and agree that:
                 </p>
@@ -129,8 +129,13 @@ export default function TermsAndConditions() {
 
             {/* User Responsibility */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">User Responsibility</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center w-10 h-10 bg-amber-100 rounded-full">
+                  <User className="w-5 h-5 text-amber-600" />
+                </div>
+                <h2 className="text-2xl font-semibold text-gray-800">User Responsibility</h2>
+              </div>
+              <p className="text-gray-600 leading-relaxed p-4">
                 Users are solely responsible for all interactions, communications, and transactions that occur 
                 after initial contact is made through our platform. We strongly encourage users to exercise 
                 caution and good judgment when meeting or conducting business with other users.
@@ -140,7 +145,7 @@ export default function TermsAndConditions() {
             {/* Contact Information */}
             <section className="border-t border-gray-200 pt-8">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">Questions?</h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 p-4">
                 If you have any questions about these terms and conditions, please contact us through our support channels.
               </p>
             </section>

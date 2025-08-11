@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import Search from "./pages/Search"
 import SettingsPage from "./pages/Settings"
 import TermsAndConditions from "./pages/TermsAndCondiitons"
+import TeacherPage from "./pages/TeacherProfile"
 
 function App() {
 
@@ -39,6 +40,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Search />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/teacher/:teacherId" 
+          element={
+            <ProtectedRoute>
+              <TeacherPage />
             </ProtectedRoute>
           } 
         />
