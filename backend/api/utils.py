@@ -4,7 +4,11 @@ from supabase import create_client, Client
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+
+if url and key:
+    supabase: Client = create_client(url, key)
+else: # For testing
+    supabase = None
 
 STORAGE_BUCKET = os.environ.get("STORAGE_BUCKET")
 MAX_FILE_SIZE = 5 * 1024 * 1024 # 5 MB
