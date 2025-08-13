@@ -6,8 +6,8 @@ class TeacherFilter(django_filters.FilterSet):
         model = Teacher
         fields = {
             "instrument": ["icontains"],
-            "rate": ["iexact", "lt", "lte", "gt", "gte"],
+            "rate": ["lt", "lte", "gt", "gte"],
             "location": ["icontains"],
             "bio": ["icontains"],
-            "years_experience": ["iexact", "lt", "lte", "gt", "gte"]
+            "years_experience": ["lt", "lte", "gt", "gte"]
         }

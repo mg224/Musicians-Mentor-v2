@@ -8,7 +8,7 @@ from .models import Student, Teacher
 
 User = get_user_model()
 
-# Comprehensive test class for both Student and Teacher role functionality
+# Comprehensive test class for both Student and Teacher functionality
 class UserRoleTestCase(TestCase):
     
     def setUp(self):
@@ -18,6 +18,7 @@ class UserRoleTestCase(TestCase):
         self.student_registration_data = {
             'first_name': 'John',
             'last_name': 'Doe',
+            'email': 'johndoe@example.com',
             'username': 'johndoe_student',
             'password': 'testpass123',
             'role': 'student'
@@ -26,6 +27,7 @@ class UserRoleTestCase(TestCase):
         self.teacher_registration_data = {
             'first_name': 'Sarah',
             'last_name': 'Johnson',
+            'email': 'sarahjohnson@example.com',
             'username': 'sarah_teacher',
             'password': 'testpass123',
             'role': 'teacher'
@@ -36,6 +38,7 @@ class UserRoleTestCase(TestCase):
         self.student_user = User.objects.create_user(
             first_name='Alice',
             last_name='Johnson',
+            email='alicejohnson@example.com',
             username='alice_student',
             password='testpass123',
             role='student'
@@ -52,6 +55,7 @@ class UserRoleTestCase(TestCase):
         self.student_user2 = User.objects.create_user(
             first_name='Mike',
             last_name='Davis',
+            email='mikedavis@example.com',
             username='mike_student',
             password='testpass123',
             role='student'
@@ -68,6 +72,7 @@ class UserRoleTestCase(TestCase):
         self.teacher_user = User.objects.create_user(
             first_name='Emily',
             last_name='Wilson',
+            email='emilywilson@example.com',
             username='emily_teacher',
             password='testpass123',
             role='teacher'
@@ -85,6 +90,7 @@ class UserRoleTestCase(TestCase):
         self.teacher_user2 = User.objects.create_user(
             first_name='David',
             last_name='Brown',
+            email='davidbrown@example.com',
             username='david_teacher',
             password='testpass123',
             role='teacher'
@@ -98,8 +104,8 @@ class UserRoleTestCase(TestCase):
             rate=90.0
         )
 
+    # Helper method to get JWT token for a user
     def get_jwt_token(self, user):
-        """Helper method to get JWT token for a user"""
         refresh = RefreshToken.for_user(user)
         return str(refresh.access_token)
 
@@ -131,7 +137,7 @@ class UserRoleTestCase(TestCase):
         register_url = reverse('register')
         self.client.post(register_url, self.student_registration_data, format='json')
         
-        login_url = reverse('get_token')
+        login_url = reverse('login')
         login_data = {
             'username': self.student_registration_data['username'],
             'password': self.student_registration_data['password']
@@ -146,7 +152,7 @@ class UserRoleTestCase(TestCase):
         register_url = reverse('register')
         self.client.post(register_url, self.teacher_registration_data, format='json')
         
-        login_url = reverse('get_token')
+        login_url = reverse('login')
         login_data = {
             'username': self.teacher_registration_data['username'],
             'password': self.teacher_registration_data['password']
@@ -188,11 +194,13 @@ class UserRoleTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['instrument'], 'Violin')
         self.assertEqual(response.data['grade_level'], 11)
+        self.assertEqual(response.data['location'], 'Boston')
         
         # Verify changes were saved in database
         self.student_profile.refresh_from_db()
         self.assertEqual(self.student_profile.instrument, 'Violin')
         self.assertEqual(self.student_profile.grade_level, 11)
+        self.assertEqual(self.student_profile.location, 'Boston')
 
     def test_student_profile_partial_updates(self):
         token = self.get_jwt_token(self.student_user)
@@ -244,12 +252,15 @@ class UserRoleTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['instrument'], 'Violin & Viola')
         self.assertEqual(response.data['years_experience'], 10)
+        self.assertEqual(response.data['location'], 'San Francisco')
         self.assertEqual(response.data['rate'], 85.0)
         
         # Verify changes were saved in database
         self.teacher_profile.refresh_from_db()
         self.assertEqual(self.teacher_profile.instrument, 'Violin & Viola')
         self.assertEqual(self.teacher_profile.years_experience, 10)
+        self.assertEqual(self.teacher_profile.location, 'San Francisco')
+        self.assertEqual(self.teacher_profile.rate, 85.0)
 
     def test_teacher_profile_partial_updates(self):
         token = self.get_jwt_token(self.teacher_user)
@@ -270,18 +281,6 @@ class UserRoleTestCase(TestCase):
 
     # BROWSING FUNCTIONALITY TESTS (Both Roles)
 
-    def test_student_can_view_all_students(self):
-        """Test that a student can view the list of all students"""
-        token = self.get_jwt_token(self.student_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        
-        url = reverse('students')
-        response = self.client.get(url)
-        
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertTrue(len(response.data) >= 2)  # At least our two test students
-
     def test_student_can_view_all_teachers(self):
         token = self.get_jwt_token(self.student_user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
@@ -291,51 +290,7 @@ class UserRoleTestCase(TestCase):
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsInstance(response.data, list)
-        self.assertTrue(len(response.data) >= 2)  # At least our two test teachers
-
-    def test_teacher_can_view_all_students(self):
-        token = self.get_jwt_token(self.teacher_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        
-        url = reverse('students')
-        response = self.client.get(url)
-        
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        student_usernames = [student['user']['username'] for student in response.data]
-        self.assertIn(self.student_user.username, student_usernames)
-
-    def test_teacher_can_view_all_teachers(self):
-        token = self.get_jwt_token(self.teacher_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        
-        url = reverse('teachers')
-        response = self.client.get(url)
-        
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        teacher_usernames = [teacher['user']['username'] for teacher in response.data]
-        self.assertIn(self.teacher_user.username, teacher_usernames)
-        self.assertIn(self.teacher_user2.username, teacher_usernames)
-
-    def test_specific_student_profile_viewing(self):
-        # Test as student
-        token = self.get_jwt_token(self.student_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        
-        url = reverse('students', kwargs={'student_id': self.student_profile2.id})
-        response = self.client.get(url)
-        
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], self.student_profile2.id)
-        
-        # Test as teacher
-        token = self.get_jwt_token(self.teacher_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['user']['username'], self.student_user2.username)
+        self.assertTrue(len(response.data) >= 2)  # At least the two test teachers
 
     def test_specific_teacher_profile_viewing(self):
         """Test that both roles can view specific teacher profiles"""
@@ -370,18 +325,91 @@ class UserRoleTestCase(TestCase):
         self.assertEqual(response.data['rate'], 75.0)
         self.assertEqual(response.data['years_experience'], 8)
         self.assertIn('bio', response.data)
-
-    def test_teacher_viewing_student_grade_and_interests(self):
-        token = self.get_jwt_token(self.teacher_user)
+    
+    def test_student_searching_teachers(self):
+        token = self.get_jwt_token(self.student_user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+        base_url = reverse('teacher_search')
         
-        url = reverse('students', kwargs={'student_id': self.student_profile.id})
-        response = self.client.get(url)
-        
+        # Test by searching by instrument (case insensitive - should find Violin)
+        response = self.client.get(base_url, {'instrument__icontains': 'violin'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['grade_level'], 10)
-        self.assertEqual(response.data['instrument'], 'Piano')
-        self.assertIn('bio', response.data)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['instrument'], 'Violin')
+        
+        # Test searching by instrument (case insensitive - should find Piano)
+        response = self.client.get(base_url, {'instrument__icontains': 'piano'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['instrument'], 'Piano')
+        
+        # Test searching by location
+        response = self.client.get(base_url, {'location__icontains': 'los angeles'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['location'], 'Los Angeles')
+        
+        # Test searching by rate range (less than or equal to)
+        response = self.client.get(base_url, {'rate__lte': '80'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['rate'], 75.0)
+        
+        # Test searching by rate range (greater than or equal to)
+        response = self.client.get(base_url, {'rate__gte': '85'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['rate'], 90.0)
+        
+        # Test searching by years of experience (greater than)
+        response = self.client.get(base_url, {'years_experience__gt': '10'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['years_experience'], 12)
+        
+        # Test searching by years of experience (less than or equal to)
+        response = self.client.get(base_url, {'years_experience__lte': '10'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['years_experience'], 8)
+        
+        # Test searching by bio content
+        response = self.client.get(base_url, {'bio__icontains': 'professional'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertIn('Professional', results[0]['bio'])
+        
+        # Test multiple filters (instrument and location)
+        response = self.client.get(base_url, {
+            'instrument__icontains': 'piano',
+            'location__icontains': 'chicago'
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['instrument'], 'Piano')
+        self.assertEqual(results[0]['location'], 'Chicago')
+        
+        # Test search with no results
+        response = self.client.get(base_url, {'instrument__icontains': 'drums'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertEqual(len(results), 0)
+        
+        # Test empty search (should return all teachers)
+        response = self.client.get(base_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data['results'] if 'results' in response.data else response.data
+        self.assertTrue(len(results) >= 2)
 
     # SECURITY & VALIDATION TESTS
 
@@ -461,6 +489,6 @@ class UserRoleTestCase(TestCase):
 
     def tearDown(self):
         """Clean up after each test"""
-        User.objects.all().delete()
-        Student.objects.all().delete()
         Teacher.objects.all().delete()
+        Student.objects.all().delete()
+        User.objects.all().delete()

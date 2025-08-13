@@ -11,9 +11,9 @@
 
   <h2> Core Features </h2>
   <p> 1. JWT authentication to ensure security of users </p>
-  <p> 2. Student/Teacher profile creation and role-based access to the site. </p>
+  <p> 2. Student/Teacher profile creation and role-based access to the site </p>
   <p> 3. Search page to browse a directory of accomplished student teachers nationwide by location, instrument, experience level, rate, etc. </p>
-  <p> 4. (Coming soon) Algorithmic matching system to suggest compatible teachers to students based off student profile. </p>
+  <p> 4. (Coming soon) Algorithmic matching system to suggest compatible teachers to students based off student profile </p>
 
   <h2> Tech Stack </h2>
   <p> Frontend: React + Vite, TypeScript, and TailwindCSS </p> 

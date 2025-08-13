@@ -178,7 +178,7 @@ export default function TeacherPage() {
                   {teacherProfile.user.email ? 
                     (
                       <span>
-                        <a href={`mailto:${teacherProfile.user.email}`}>
+                        <a href={`mailto:${teacherProfile.user.email}`} className="text-blue-500 hover:underline transition-all">
                           {teacherProfile.user.email}
                         </a>
                       </span>
@@ -197,16 +197,6 @@ export default function TeacherPage() {
                   <span>{teacherProfile.location || "N/A"}</span>
                 </div>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col gap-3">
-              <Link
-                to="/settings"
-                className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer">
-                <Settings className="w-4 h-4" />
-                Edit Profile
-              </Link>
             </div>
           </div>
 

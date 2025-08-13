@@ -136,7 +136,7 @@ export default function Contact() {
                 <button
                   disabled={!isFormValid}
                   type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className={`w-full text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 ${isFormValid ? 'bg-purple-600 hover:bg-purple-700 transition-colors cursor-pointer' : 'bg-purple-300 cursor-not-allowed'}`}
                 >
                   <Send className="w-4 h-4" />
                   Send Message
