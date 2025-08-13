@@ -21,10 +21,6 @@ ENV/
 *.sqlite3
 db.sqlite3
 
-# Ignore Django migrations (optional, see below)
-**/migrations/
-!*/migrations/__init__.py
-
 # Static and media files (if collected/generated)
 staticfiles/
 media/
