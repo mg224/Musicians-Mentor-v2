@@ -46,6 +46,11 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
       const res = await api.post("/api/logout/", {
         refresh_token: refreshToken
       })
+
+      if (res.status !== 200) {
+        throw new Error("Failed to logout")
+      }
+
       toast.success("Logged out successfully!")
 
     } catch (error) {

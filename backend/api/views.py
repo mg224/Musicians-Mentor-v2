@@ -156,11 +156,6 @@ class TeacherSearchView(generics.ListAPIView):
     filterset_class = TeacherFilter
     queryset = Teacher.objects.all().order_by('id')
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        print("Teacher queryset:", qs)  # Logs queryset in console
-        return qs
-
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def ping(request):
