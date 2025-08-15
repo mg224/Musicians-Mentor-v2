@@ -7,7 +7,7 @@
   <p> Musician's Mentor is the first online platform built to facilitate affordable, peer-to-peer music lessons. Students can search for accomplished high school and college musicians and filter by various criteria to find the right fit. </p>
   
   <h2> Website Link </h2>
-  <p> Coming soon! </p>
+  <a href="https://musiciansmentor.vercel.app/"> musiciansmentor.vercel.app/ </a>
 
   <h2> Core Features </h2>
   <p> 1. JWT authentication to ensure security of users </p>
