@@ -37,6 +37,7 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
     e.preventDefault()
 
     try {
+      setLoading(true)
       const refreshToken = sessionStorage.getItem(REFRESH_TOKEN)
         
       if (!refreshToken) {
@@ -66,6 +67,7 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
       sessionStorage.removeItem(ACCESS_TOKEN)
       sessionStorage.removeItem(REFRESH_TOKEN)
       sessionStorage.clear()
+      setLoading(false)
 
       navigate("/")
 

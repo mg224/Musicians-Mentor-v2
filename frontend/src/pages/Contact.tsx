@@ -27,7 +27,7 @@ export default function Contact() {
             e.currentTarget,
             import.meta.env.VITE_PUBLIC_KEY
         )
-        .then((result) => {
+        .then(() => {
             alert("Message Sent!");
             setFormData({ name: "", email: "", subject: "", message: "" })
         })

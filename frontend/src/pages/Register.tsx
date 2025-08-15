@@ -96,7 +96,12 @@ export default function RegisterPage() {
 
     try {
       setLoading(true)
+      
       const res = await api.post("/api/register/", formData)
+      if (res.status !== 200) {
+        throw new Error('Failed to fetch user profile')
+      }
+
       toast.success("Account created successfully!")
       navigate("/login")
     } catch (error) {

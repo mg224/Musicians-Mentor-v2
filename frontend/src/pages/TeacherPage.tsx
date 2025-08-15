@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { type StudentProfile, type TeacherProfile } from '../utils/types'
 import api from '../utils/api'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 export default function TeacherPage() {
   const { teacherId } = useParams()
