@@ -1,6 +1,4 @@
-import React from 'react'
 import { Shield, Users, MessageSquare, ExternalLink, ArrowLeft, User } from 'lucide-react'
-import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Music, Bell, Settings, LogOut, User, MessageCircle, Search } from 'lucide-react'
+import { Music, Settings, LogOut, User, Search } from 'lucide-react'
 import api from "../utils/api"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants"
 import { useNavigate, useLocation, Link } from "react-router-dom"

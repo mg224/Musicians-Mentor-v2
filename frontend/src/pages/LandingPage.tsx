@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Music, Users, Play, UserPlus, Heart, Award, BookOpen, MessageCircle, DollarSign, Handshake, type LucideIcon } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Music, Users, Play, UserPlus, Heart, Award, BookOpen, DollarSign, Handshake, type LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface Feature {

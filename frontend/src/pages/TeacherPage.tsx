@@ -1,5 +1,5 @@
-import React, { act, useEffect, useState } from 'react'
-import { Music, Bell, Settings, LogOut, User,  MapPin, Award, Clock, DollarSign, GraduationCap, CircleAlert, Mail } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Music, MapPin, Clock, DollarSign, Mail } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { type StudentProfile, type TeacherProfile } from '../utils/types'

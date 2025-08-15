@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Save, Upload, ArrowLeft, User, MapPin, Music, DollarSign, Calendar, FileText } from 'lucide-react'
+import { Upload, ArrowLeft, User, FileText } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
