@@ -156,7 +156,7 @@ class TeacherSearchView(generics.ListAPIView):
     filterset_class = TeacherFilter
     queryset = Teacher.objects.all().order_by('id')
 
-@api_view(['GET', 'HEAD', 'POST'])
+@api_view(['GET', 'HEAD'])
 @permission_classes([AllowAny])
 def ping(request):
     return Response(status=status.HTTP_200_OK)
