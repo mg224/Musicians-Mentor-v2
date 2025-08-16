@@ -144,7 +144,7 @@ export default function UserDashboard() {
                   {activeProfile.user.email ? 
                     (
                       <span>
-                        <a href={`mailto:${activeProfile.user.email}`}>
+                        <a href={`mailto:${activeProfile.user.email}`} className="text-blue-500 hover:underline transition-all">
                           {activeProfile.user.email}
                         </a>
                       </span>
