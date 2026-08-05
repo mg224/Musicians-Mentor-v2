@@ -17,7 +17,7 @@ ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]
 def upload_to_supabase_storage(file):
     try:
         if file.size > MAX_FILE_SIZE:
-            return False, f"File too large. Maximum size is {MAX_FILE_SIZE // (1024*1024)}MB"
+            return False, f"File too large. Maximum size is {MAX_FILE_SIZE // (1024*1024)} MB"
         
         if file.content_type not in ALLOWED_IMAGE_TYPES:
             return False, f"Invalid file type. Allowed types: {', '.join(ALLOWED_IMAGE_TYPES)}"
