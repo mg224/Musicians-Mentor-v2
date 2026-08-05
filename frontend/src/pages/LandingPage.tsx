@@ -57,19 +57,12 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-pink-200 rounded-full opacity-20 animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-blue-200 rounded-full opacity-20 animate-bounce"></div>
-        <div className="absolute bottom-32 left-20 w-28 h-28 bg-yellow-200 rounded-full opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-20 h-20 bg-green-200 rounded-full opacity-20 animate-bounce"></div>
-      </div>
-
-      <header className="relative bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 opacity-50 animate-pulse"></div>
+      <header className="relative bg-purple-600 text-white overflow-hidden">
+        <div className="absolute inset-0 bgp-ink-400 opacity-50 animate-pulse"></div>
         <nav className="relative z-10 container mx-auto px-6 py-6 flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <Music className="w-10 h-10 animate-spin" style={{animationDuration: '3s'}} />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">
+            <Music className="w-10 h-10" />
+            <h1 className="text-3xl font-bold bg-yellow-300 bg-clip-text text-transparent">
               Musician's Mentor
             </h1>
           </div>
@@ -82,7 +75,7 @@ export default function LandingPage() {
             </Link>
             <Link 
               to="/signup"
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-full font-semibold hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg cursor-pointer"
+              className="bg-orange-400 text-white px-6 py-3 rounded-full font-semibold hover:orange-700 transform hover:scale-105 transition-all duration-300 shadow-lg cursor-pointer"
             >
               Sign Up
             </Link>
@@ -93,7 +86,7 @@ export default function LandingPage() {
       <section id="hero" className="relative bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 py-20">
         <div className="container mx-auto px-6 text-center">
           <div className={`transform transition-all duration-1000 ${isVisible.hero ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <h2 className="text-6xl font-bold mb-6 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            <h2 className="text-6xl font-bold mb-6 bg-purple-600 bg-clip-text text-transparent">
               Musician's Mentor
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -102,7 +95,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
                 to="/signup"
-                className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-pink-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-xl flex items-center space-x-2 cursor-pointer"
+                className="bg-pink-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:pink-600 transform hover:scale-105 transition-all duration-300 shadow-xl flex items-center space-x-2 cursor-pointer"
               >
                 <Play className="w-5 h-5" />
                 <span>Get Started</span>
@@ -122,7 +115,7 @@ export default function LandingPage() {
       <section id="features" className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <div className={`text-center mb-16 transform transition-all duration-1000 ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <h3 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <h3 className="text-4xl font-bold mb-4 bg-purple-600 bg-clip-text text-transparent">
               What is Musicians Mentor?
             </h3>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -137,7 +130,7 @@ export default function LandingPage() {
                 className={`text-center p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-white shadow-lg hover:shadow-2xl transform transition-all duration-200 hover:-translate-y-2 ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
                 style={{transitionDelay: `${index * 100}ms`}}
               >
-                <div className="bg-gradient-to-r from-pink-500 to-purple-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 transform hover:rotate-12 transition-transform duration-300">
+                <div className="bg-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 transform hover:rotate-12 transition-transform duration-300">
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-xl font-bold mb-3 text-gray-800">{feature.title}</h4>
@@ -151,7 +144,7 @@ export default function LandingPage() {
       <section id="how-it-works" className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
         <div className="container mx-auto px-6">
           <div className={`text-center mb-16 transform transition-all duration-1000 ${isVisible['how-it-works'] ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <h3 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h3 className="text-4xl font-bold mb-4 bg-purple-600 bg-clip-text text-transparent">
               How It Works
             </h3>
           </div>
@@ -164,7 +157,7 @@ export default function LandingPage() {
                 style={{transitionDelay: `${index * 200}ms`}}
               >
                 <div className="relative mb-8">
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 transform hover:scale-110 transition-transform duration-300">
+                  <div className="bg-pink-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 transform hover:scale-110 transition-transform duration-300">
                     <item.icon className="w-10 h-10 text-white" />
                   </div>
                   <div className="absolute -top-2 -left-2 bg-yellow-400 text-purple-800 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
@@ -182,7 +175,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white relative overflow-hidden">
+      <section className="py-20 bg-purple-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <h3 className="text-4xl font-bold mb-6">
@@ -227,7 +220,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Musicians Mentor. All rights reserved.</p>
+            <p>&copy; 2025 Musician's Mentor. All rights reserved.</p>
           </div>
         </div>
       </footer>

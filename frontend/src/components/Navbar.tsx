@@ -86,14 +86,13 @@ export default function Navbar({ userName, userRole, userAvatar }: NavbarProps) 
   }
 
   return (
-    <nav className="relative bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white shadow-lg">
+    <nav className="relative bg-purple-700 text-white shadow-lg">
       <ToastContainer />
-      <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 opacity-50 animate-pulse"></div>
       <div className="relative z-10 container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <Music className="w-10 h-10 animate-spin" style={{animationDuration: '3s'}} />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">
+            <Music className="w-10 h-10" />
+            <h1 className="text-3xl font-bold bg-yellow-300 bg-clip-text text-transparent">
               Musician's Mentor
             </h1>
           </div>
